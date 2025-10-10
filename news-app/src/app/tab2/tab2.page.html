@@ -6,27 +6,37 @@
 
 <ion-content>
   <ion-list lines="full">
+    
     <ion-item>
       <ion-label position="floating">Título</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input
+        type="text"
+        [(ngModel)]="titulo">
+      </ion-input>
     </ion-item>
 
+    
     <ion-item>
       <ion-label position="floating">Fecha</ion-label>
       <ion-datetime
-        display-format="YYYY-MM-DD"
+        [(ngModel)]="fecha"
+        presentation="date"
         placeholder="Selecciona una fecha">
       </ion-datetime>
     </ion-item>
 
+   
     <ion-item>
       <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea auto-grow="true"></ion-textarea>
+      <ion-textarea
+        auto-grow="true"
+        [(ngModel)]="descripcion">
+      </ion-textarea>
     </ion-item>
   </ion-list>
 
   <div style="text-align:center; margin-top:20px;">
-    <ion-button expand="block" color="primary">
+    <ion-button expand="block" color="primary" (click)="agregarNoticia()">
       Agregar
     </ion-button>
   </div>
