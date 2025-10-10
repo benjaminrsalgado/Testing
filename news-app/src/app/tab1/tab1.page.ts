@@ -1,4 +1,14 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { NoticiasService } from '../services/noticias';
+
+interface Noticia {
+  id?: string;
+  titulo: string;
+  descripcion: string;
+  fecha: string;
+}
 
 @Component({
   selector: 'app-tab1',
@@ -7,7 +17,21 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class Tab1Page {
+  noticias$: Observable<Noticia[]>;
 
-  constructor() {}
+  constructor(private readonly noticiasService: NoticiasService) {
+    this.noticias$ = this.noticiasService.getNoticias() as Observable<Noticia[]>;
+  }
 
+  async eliminarNoticia(id?: string) {
+    if (!id) {
+      return;
+    }
+
+    try {
+      await this.noticiasService.deleteNoticia(id);
+    } catch (err) {
+      console.error('No se pudo eliminar la noticia', err);
+    }
+  }
 }

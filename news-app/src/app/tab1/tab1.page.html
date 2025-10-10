@@ -5,15 +5,46 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <img alt="Noticia" src="https://ionicframework.com/docs/img/demos/card-media.png" />
-    <ion-card-header>
-      <ion-card-title>Noticia de prueba</ion-card-title>
-      <ion-card-subtitle>2025-10-09</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      Esta es una descripción de ejemplo para mostrar cómo se verán las noticias en la aplicación.
-    </ion-card-content>
-    <ion-button color="danger" expand="block">Eliminar</ion-button>
-  </ion-card>
+  <ng-container *ngIf="noticias$ | async as noticias; else cargando">
+    <div *ngIf="noticias.length; else vacio" class="lista-noticias">
+      <ion-card *ngFor="let noticia of noticias">
+        <img
+          class="placeholder"
+          src="https://ionicframework.com/docs/img/demos/card-media.png"
+          alt="Imagen de la noticia"
+        />
+        <ion-card-header>
+          <ion-card-title>{{ noticia.titulo }}</ion-card-title>
+          <ion-card-subtitle class="fecha">
+            {{ noticia.fecha | date: 'mediumDate' }}
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ noticia.descripcion }}</p>
+        </ion-card-content>
+        <ion-button
+          color="danger"
+          expand="block"
+          fill="solid"
+          (click)="eliminarNoticia(noticia.id)"
+        >
+          Eliminar
+        </ion-button>
+      </ion-card>
+    </div>
+  </ng-container>
+
+  <ng-template #cargando>
+    <div class="estado centrado">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando noticias…</p>
+    </div>
+  </ng-template>
+
+  <ng-template #vacio>
+    <div class="estado centrado">
+      <ion-icon name="newspaper-outline" size="large"></ion-icon>
+      <p>No hay noticias registradas todavía.</p>
+    </div>
+  </ng-template>
 </ion-content>
