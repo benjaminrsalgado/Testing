@@ -9,36 +9,38 @@ import { NoticiasService } from '../services/noticias';
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  standalone: true, 
-  imports: [IonicModule, CommonModule, FormsModule], 
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class Tab2Page {
   titulo: string = '';
   descripcion: string = '';
-  fecha: string = '';
+  fecha: string | null | undefined;
 
   constructor(private noticiasService: NoticiasService) {}
 
   agregarNoticia() {
-    if (!this.titulo || !this.descripcion || !this.fecha) {
-      alert('Por favor completa todos los campos');
+    if (!this.titulo ||  !this.descripcion || !this.fecha) {
+      alert('Completa todos los campos.');
       return;
     }
 
     const noticia = {
       titulo: this.titulo,
       descripcion: this.descripcion,
-      fecha: this.fecha,
+      fecha: this.fecha as string,
     };
+
+    console.log('Noticia a guardar:', noticia);
 
     this.noticiasService
       .addNoticia(noticia)
       .then(() => {
-        alert('Noticia agregada con éxito');
+        alert('Noticia agregada exitosamente.');
         this.titulo = '';
         this.descripcion = '';
         this.fecha = '';
       })
-      .catch((err) => console.error('Error al agregar noticia:', err));
+      .catch((err) => console.error('No se pudo agregar noticia, error:', err));
   }
 }

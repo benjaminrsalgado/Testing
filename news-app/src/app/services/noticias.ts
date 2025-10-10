@@ -1,23 +1,31 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Injectable, inject } from '@angular/core';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  collectionData,
+  deleteDoc,
+  doc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoticiasService {
-  constructor(private firestore: AngularFirestore) {}
+  private readonly firestore = inject(Firestore);
 
   addNoticia(noticia: { titulo: string; descripcion: string; fecha: string }) {
-    return this.firestore.collection('noticias').add(noticia);
+    const noticiasCollection = collection(this.firestore, 'noticias');
+    return addDoc(noticiasCollection, noticia);
   }
 
   getNoticias() {
-    return this.firestore
-      .collection('noticias')
-      .valueChanges({ idField: 'id' });
+    const noticiasCollection = collection(this.firestore, 'noticias');
+    return collectionData(noticiasCollection, { idField: 'id' });
   }
 
   deleteNoticia(id: string) {
-    return this.firestore.collection('noticias').doc(id).delete();
+    const noticiaDoc = doc(this.firestore, `noticias/${id}`);
+    return deleteDoc(noticiaDoc);
   }
 }
